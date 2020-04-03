@@ -19,10 +19,7 @@ namespace CustomerServiceSplitter
         /// <summary>
         /// Flag for test mode - will change the BH query but not the tables.  ****update this if needed to flag from test or true, if changing to test need to modify the tables below as well****
         /// </summary>
-        public static bool TestMode
-        {
-            get { return true; }
-        }
+        public static bool TestMode = true;
 
         /// <summary>
         /// Flag for whether this is on reporting - shouldn't be as it does updates as well
@@ -45,7 +42,18 @@ namespace CustomerServiceSplitter
         /// </summary>
         public static string connectionString_BH_RO
         {
-            get { return AMC_Functions.DetermineDSNFile.getDSN("jerrodr", "DB1", false) ; }
+            get
+            {
+                if (TestMode)
+                {
+                    return AMC_Functions.DetermineDSNFile.getDSN("jerrodr", "Training DB1", false);
+                }
+                else
+                {
+                    return AMC_Functions.DetermineDSNFile.getDSN("jerrodr", "DB1", false);
+                }
+
+            }
         }
 
         /// <summary>
@@ -53,7 +61,18 @@ namespace CustomerServiceSplitter
         /// </summary>
         public static string connectionString_BH
         {
-            get { return AMC_Functions.DetermineDSNFile.getDSN("jerrodr", "DB1", true); }
+            get
+            {
+                if (TestMode)
+                {
+                    return AMC_Functions.DetermineDSNFile.getDSN("jerrodr", "Training DB1", true);
+                }
+                else
+                {
+                    return AMC_Functions.DetermineDSNFile.getDSN("jerrodr", "DB1", true);
+                }
+
+            }
         }
 
         /// <summary>
@@ -97,13 +116,14 @@ namespace CustomerServiceSplitter
         /// </summary>
         public static string selectSQL_ODBC
         {
-            get { return $@"SELECT amanumber as 'Account Num', amstatus as 'Status', amcnumber as 'Cred_Num', dmfname as 'First Name', dmlname as 'Last name', amdnumber as 'Debtor Num', '' as 'Highest Importance', '' as 'Reason' '' as 'WORKER#', '' as 'Worker_Timestamp', {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} as 'date_inserted', credwin_L.wdtext[11] as 'Last Contact Date', credwin_L.wdtext[12] as 'Last Contact Time', cmalphcode as 'Alpha', acctwin_5.wdtext[14] as 'Pend Date' , '' as 'WrittenDispute', '' as 'Client Access', '' as 'Export Type', '' as 'Comment', amclacctno as 'Client Account #', amdatelstd as 'List Date', amlstactdt as 'Last Activity Date', ambalance as 'Current Balance', amlastdate as 'Last Pay Date', acctwin_C.wdtext[1] as 'Account', acctwin_C.wdtext[2] as 'Ticket', acctwin_C.wdtext[3] as 'Encounter', acctwin_C.wdtext[4] as 'PatientID', acctwin_C.wdtext[5] as 'Guarantor', acctwin_C.wdtext[6] as 'Visit #', acctwin_C.wdtext[7] as 'Charge ID', acctwin_C.wdtext[8] as 'MRN', acctwin_C.wdtext[9] as 'Order #', acctwin_C.wdtext[10] as 'Invoice #', acctwin_C.wdtext[11] as 'NPI #', acctwin_C.wdtext[12] as 'Customer #', acctwin_C.wdtext[13] as 'Clnt Tx ID', acctwin_C.wdtext[14] as 'Bill #', acctwin_C.wdtext[15] as 'CASE #', acctwin_C.wdtext[16] as 'Comp ID', acctwin_X4.wdtext[1] as 'Pharm NM', acctwin_X4.wdtext[2] as 'Address', acctwin_X4.wdtext[3] as 'Non-Abv-NM', acctwin_X4.wdtext[4] as 'Billing NM', acctwin_H.wdtext[1] as 'PT First Name', acctwin_H.wdtext[1] as 'PT Last Name', acctwin_H.wdtext[2] as 'PT SS#', acctwin_H.wdtext[3] as 'PT DOB', acctwin_H.wdtext[11] as 'DOC NAME', acctwin_H.wdtext[12] as 'CLINIC', dbtrwin_P.wdtext[9] as 'CHPT-CASE#', dbtrwin_P.wdtext[10] as 'FILE DATE', dbtrwin_P.wdtext[6] as 'DOD', dbtrwin_W.wdtext[1] as 'H-PAY FREQ', dbtrwin_W.wdtext[1] as '', dbtrwin_W.wdtext[2] as 'DEPARTMENT', dbtrwin_W.wdtext[3] as 'HRS WORKED', dbtrwin_W.wdtext[4] as '$/HR/SAL', dbtrwin_W.wdtext[5] as 'S-PAY FREQ', dbtrwin_W.wdtext[6] as 'S-DEPARTMENT', dbtrwin_W.wdtext[7] as 'S-HRS WORKED', dbtrwin_W.wdtext[8] as 'S - $/HR/SAL', dbtrwin_W.wdtext[9] as '# OF KIDS', dbtrwin_W.wdtext[10] as 'H-PKS/GKS$', dbtrwin_W.wdtext[11] as 'S-PKS/GKS', dbtrwin_W.wdtext[12] as 'MTG/RENT$', dbtrwin_W.wdtext[13] as 'RECV AID', dbtrwin_W.wdtext[14] as 'PP OFFERED', dbtrwin_W.wdtext[15] as 'OTHER:', dbtrwin_W.wdtext[16] as 'UPDATED', '' as 'Flagged', '' as 'IS Flagged', cmcname as 'Cred Name', '' as 'Account Status', amamtlstd as 'List Amount', dmssn as 'Guar SSN', '' as 'Interest', ambalance as 'Prin Bal', dmdob as 'Guar DOB', '' as 'Amount Paid', '' as 'Date Paid', dacolcode as 'Queue', acctwin_XA.wdtext[1] as 'Claims Paid Amount1', acctwin_XA.wdtext[2] as 'Claims Paid Date1', acctwin_XA.wdtext[3] as 'Claims Paid Amount2', acctwin_XA.wdtext[4] as 'Claims Paid Date2', acctwin_XA.wdtext[5] as 'Claims Paid Amount3', acctwin_XA.wdtext[6] as 'Claims Paid Date3', acctwin_XA.wdtext[7] as 'Claims Paid Amount4', acctwin_XA.wdtext[8] as 'Claims Paid Date4', akaname as 'AKAName', '' as 'NoticeType', 0 as 'DaysInWorker'
+            get { return $@"SELECT amanumber as 'Account Num', amstatus as 'Status', amcnumber as 'Cred_Num', dmfname as 'First Name', dmlname as 'Last name', amdnumber as 'Debtor Num', '' as 'Highest Importance', '' as 'Reason', '' as 'WORKER#', '' as 'Worker_Timestamp', '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}' as 'date_inserted', credwin_L.wdtext[11] as 'Last Contact Date', credwin_L.wdtext[12] as 'Last Contact Time', cmalphcode as 'Alpha', acctwin_5.wdtext[14] as 'Pend Date' , '' as 'WrittenDispute', '' as 'Client Access', '' as 'Export Type', '' as 'Comment', amclacctno as 'Client Account #', amdatelstd as 'List Date', amlstactdt as 'Last Activity Date', ambalance as 'Current Balance', amlastdate as 'Last Pay Date', acctwin_C.wdtext[1] as 'Account', acctwin_C.wdtext[2] as 'Ticket', acctwin_C.wdtext[3] as 'Encounter', acctwin_C.wdtext[4] as 'PatientID', acctwin_C.wdtext[5] as 'Guarantor', acctwin_C.wdtext[6] as 'Visit #', acctwin_C.wdtext[7] as 'Charge ID', acctwin_C.wdtext[8] as 'MRN', acctwin_C.wdtext[9] as 'Order #', acctwin_C.wdtext[10] as 'Invoice #', acctwin_C.wdtext[11] as 'NPI #', acctwin_C.wdtext[12] as 'Customer #', acctwin_C.wdtext[13] as 'Clnt Tx ID', acctwin_C.wdtext[14] as 'Bill #', acctwin_C.wdtext[15] as 'CASE #', acctwin_C.wdtext[16] as 'Comp ID', acctwin_X4.wdtext[1] as 'Pharm NM', acctwin_X4.wdtext[2] as 'Address', acctwin_X4.wdtext[3] as 'Non-Abv-NM', acctwin_X4.wdtext[4] as 'Billing NM', acctwin_H.wdtext[1] as 'PT First Name', acctwin_H.wdtext[1] as 'PT Last Name', acctwin_H.wdtext[2] as 'PT SS#', acctwin_H.wdtext[3] as 'PT DOB', acctwin_H.wdtext[11] as 'DOC NAME', acctwin_H.wdtext[12] as 'CLINIC', dbtrwin_P.wdtext[9] as 'CHPT-CASE#', dbtrwin_P.wdtext[10] as 'FILE DATE', dbtrwin_P.wdtext[6] as 'DOD', dbtrwin_W.wdtext[1] as 'H-PAY FREQ', dbtrwin_W.wdtext[1] as '', dbtrwin_W.wdtext[2] as 'DEPARTMENT', dbtrwin_W.wdtext[3] as 'HRS WORKED', dbtrwin_W.wdtext[4] as '$/HR/SAL', dbtrwin_W.wdtext[5] as 'S-PAY FREQ', dbtrwin_W.wdtext[6] as 'S-DEPARTMENT', dbtrwin_W.wdtext[7] as 'S-HRS WORKED', dbtrwin_W.wdtext[8] as 'S - $/HR/SAL', dbtrwin_W.wdtext[9] as '# OF KIDS', dbtrwin_W.wdtext[10] as 'H-PKS/GKS$', dbtrwin_W.wdtext[11] as 'S-PKS/GKS', dbtrwin_W.wdtext[12] as 'MTG/RENT$', dbtrwin_W.wdtext[13] as 'RECV AID', dbtrwin_W.wdtext[14] as 'PP OFFERED', dbtrwin_W.wdtext[15] as 'OTHER:', dbtrwin_W.wdtext[16] as 'UPDATED', '' as 'Flagged', '' as 'IS Flagged', cmname as 'Cred Name', '' as 'Account Status', amamtlstd as 'List Amount', dmssn as 'Guar SSN', '' as 'Interest', ambalance as 'Prin Bal', dmdob as 'Guar DOB', '' as 'Amount Paid', '' as 'Date Paid', dacolcode as 'Queue', acctwin_XA.wdtext[1] as 'Claims Paid Amount1', acctwin_XA.wdtext[2] as 'Claims Paid Date1', acctwin_XA.wdtext[3] as 'Claims Paid Amount2', acctwin_XA.wdtext[4] as 'Claims Paid Date2', acctwin_XA.wdtext[5] as 'Claims Paid Amount3', acctwin_XA.wdtext[6] as 'Claims Paid Date3', acctwin_XA.wdtext[7] as 'Claims Paid Amount4', acctwin_XA.wdtext[8] as 'Claims Paid Date4', amakaname as 'AKAName', '' as 'NoticeType', 0 as 'DaysInWorker'
             FROM PUB.acctmstr
             JOIN PUB.damstr on PUB.damstr.dadnumber = acctmstr.amdnumber
             JOIN PUB.dbtrmstr on PUB.dbtrmstr.dmdnumber = acctmstr.amdnumber
             JOIN PUB.credmstr on PUB.credmstr.cmcnumber = acctmstr.amcnumber
             LEFT JOIN PUB.windata acctwin_C on acctwin_C.wdtype = 'A' and acctwin_C.wdcode = 'C' and acctwin_C.wdnumber = acctmstr.amanumber and acctwin_C.wdagency = acctmstr.amagency
             LEFT JOIN PUB.windata acctwin_H on acctwin_H.wdtype = 'A' and acctwin_H.wdcode = 'H' and acctwin_C.wdnumber = acctmstr.amanumber and acctwin_H.wdagency = acctmstr.amagency
+            LEFT JOIN PUB.windata acctwin_XA on acctwin_XA.wdtype = 'A' and acctwin_XA.wdcode = 'XA' and acctwin_XA.wdnumber = acctmstr.amanumber and acctwin_XA.wdagency = acctmstr.amagency
             LEFT JOIN PUB.windata acctwin_X4 on acctwin_X4.wdtype = 'A' and acctwin_X4.wdcode = 'X4' and acctwin_X4.wdnumber = acctmstr.amanumber and acctwin_X4.wdagency = acctmstr.amagency
             LEFT JOIN PUB.windata acctwin_XC on acctwin_XC.wdtype = 'A' and acctwin_XC.wdcode = 'XC' and acctwin_XC.wdnumber = acctmstr.amanumber and acctwin_XC.wdagency = acctmstr.amagency
             LEFT JOIN PUB.windata acctwin_XD on acctwin_XD.wdtype = 'A' and acctwin_XD.wdcode = 'XD' and acctwin_XD.wdnumber = acctmstr.amanumber and acctwin_XD.wdagency = acctmstr.amagency
